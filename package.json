@@ -1,0 +1,16 @@
+{
+  "name": "module-fed",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "workspaces":[
+    "app",
+    "lib"
+  ],
+  "scripts": {
+  },
+  "devDependencies": {
+  },
+  "author": "Marek Bukovsky <marek.bukovsky@asseco-ce.com>",
+  "license": "ISC"
+}

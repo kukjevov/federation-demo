@@ -1,0 +1,13 @@
+node_modules/
+wwwroot/
+build/
+packages/
+package/
+package-lock.json
+.env
+*.tsbuildinfo
+*.log
+*.bak
+*.orig
+*.pdf
+*~
