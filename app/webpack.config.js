@@ -2,52 +2,41 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ModuleFederationPlugin = require('webpack').container.ModuleFederationPlugin;
 const path = require('path');
 
-module.exports = {
-  entry: './src/index',
-  mode: 'development',
-  target: 'web',
-  devServer: {
-    static: {
-      directory: path.join(__dirname, 'dist'),
+module.exports =
+{
+    entry:
+    {
+        'main': './src/app.js'
     },
-    port: 3001,
-  },
-  output: {
-    publicPath: 'auto',
-  },
-  module: {
-    rules: [
-      {
-        test: /\.jsx?$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-        options: {
-          presets: ['@babel/preset-react'],
-        },
-      },
+    mode: 'development',
+    target: 'web',
+    output:
+    {
+        globalObject: 'self',
+        path: path.join(__dirname, 'wwwroot'),
+        filename: `[name].js`,
+        publicPath: 'auto',
+        chunkFilename: `[name].chunk.js`,
+        assetModuleFilename: 'assets/[hash][ext][query]'
+    },
+    plugins:
+    [
+        new ModuleFederationPlugin(
+        {
+            name: 'main',
+            shareScope: 'default',
+            shared:
+            {
+                "testxxx":
+                {
+                    eager: true,
+                    import: 'testxxx',
+                    shareKey: 'testxxx',
+                    shareScope: 'default',
+                    singleton: true,
+                }
+            },
+        }),
+        new HtmlWebpackPlugin(),
     ],
-  },
-  plugins: [
-    new ModuleFederationPlugin({
-      name: 'app1',
-      // adds react as shared module
-      // version is inferred from package.json
-      // there is no version check for the required version
-      // so it will always use the higher version found
-      shared: {
-        react: {
-          import: 'react', // the "react" package will be used a provided and fallback module
-          shareKey: 'react', // under this name the shared module will be placed in the share scope
-          shareScope: 'default', // share scope with this name will be used
-          singleton: true, // only a single version of the shared module is allowed
-        },
-        'react-dom': {
-          singleton: true, // only a single version of the shared module is allowed
-        },
-      },
-    }),
-    new HtmlWebpackPlugin({
-      template: './public/index.html',
-    }),
-  ],
 };
