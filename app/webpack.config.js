@@ -24,15 +24,11 @@ module.exports =
         new ModuleFederationPlugin(
         {
             name: 'main',
-            shareScope: 'default',
             shared:
             {
-                "testxxx":
+                testxxx:
                 {
                     eager: true,
-                    import: 'testxxx',
-                    shareKey: 'testxxx',
-                    shareScope: 'default',
                     singleton: true,
                 }
             },

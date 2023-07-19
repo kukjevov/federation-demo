@@ -8,7 +8,6 @@
     "start": "node ./server.cjs"
   },
   "dependencies": {
-    "testxxx": "1.0.0"
   },
   "devDependencies": {
     "connect": "3.7.0",
