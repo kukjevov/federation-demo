@@ -24,13 +24,13 @@ function loadScript()
 
     document.head.appendChild(element);
 
-    let resolve;
+    let resolve: any;
     const promise = new Promise(res => resolve = res);
 
     return promise;
 }
 
-function loadComponent(scope, module) 
+function loadComponent(scope: any, module: any) 
 {
     return async () => 
     {

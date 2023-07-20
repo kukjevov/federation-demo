@@ -1,9 +1,11 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ModuleFederationPlugin = require('webpack').container.ModuleFederationPlugin;
-const path = require('path');
-const sharedDependencies = require('../deps.cjs');
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import webpack from 'webpack';
+import path from 'path';
+import {AngularWebpackPlugin} from '@ngtools/webpack';
+import {dirName} from './webpack.commonjs.cjs';
+import sharedDependencies from '../deps.cjs';
 
-module.exports =
+export default
 {
     entry:
     {
@@ -14,7 +16,7 @@ module.exports =
     output:
     {
         globalObject: 'self',
-        path: path.join(__dirname, 'wwwroot'),
+        path: path.join(dirName, 'wwwroot'),
         filename: `[name].js`,
         publicPath: 'auto',
         chunkFilename: `[name].chunk.js`,
@@ -31,8 +33,8 @@ module.exports =
         rules: 
         [
             {
-                test: /\.([cm]?ts|tsx)$/,
-                loader: "ts-loader"
+                test: /\.ts$/,
+                loader: "@ngtools/webpack"
             },
             {
                 test: /\.m?js$/,
@@ -45,7 +47,7 @@ module.exports =
     },
     plugins:
     [
-        new ModuleFederationPlugin(
+        new webpack.container.ModuleFederationPlugin(
         {
             name: 'main',
             shared:
@@ -54,5 +56,10 @@ module.exports =
             },
         }),
         new HtmlWebpackPlugin(),
+        new AngularWebpackPlugin(
+        {
+            tsConfigPath: path.join(dirName, 'tsconfig.json'),
+            sourceMap: true,
+        }),
     ],
 };

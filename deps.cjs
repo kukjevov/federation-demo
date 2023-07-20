@@ -10,6 +10,7 @@ for(const dep in dependencies.dependencies)
     {
         eager: true,
         singleton: true,
+        requiredVersion: version,
         version: version,
     };
 }
