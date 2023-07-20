@@ -1,7 +1,9 @@
-import {showText, textVar, SomeClass} from 'testxxx';
+import {Component} from '@angular/core';
 
 console.log('toto je appka');
 
+declare const __webpack_init_sharing__: any;
+declare const __webpack_share_scopes__: any;
 
 function loadScript()
 {
@@ -33,7 +35,7 @@ function loadComponent(scope, module)
     {
         // Initializes the share scope. This fills it with known provided modules from this build and all remotes
         await __webpack_init_sharing__('default');
-        const container = window[scope]; // or get the container somewhere else
+        const container = window[scope] as any; // or get the container somewhere else
         // Initialize the container, it may provide shared modules
         console.log('xxxxx', __webpack_share_scopes__, container);
         await container.init(__webpack_share_scopes__.default);
@@ -56,12 +58,8 @@ async function run()
     console.log('moduleeee', module);
     console.log(module.test);
     console.log(module.run());
-    console.log(module.classInstance);
-
-    console.log(showText(), textVar);
-
-    console.log('instance of ', module.classInstance instanceof SomeClass)
 }
 
-setTimeout(run, 1500);
+run();
 
+console.log('isBlank app', Component);

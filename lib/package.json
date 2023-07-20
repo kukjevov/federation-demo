@@ -7,12 +7,11 @@
     "build": "webpack",
     "start": "node ./server.cjs"
   },
-  "dependencies": {
-  },
   "devDependencies": {
     "connect": "3.7.0",
     "connect-gzip-static": "3.0.0",
-    "serve-static": "1.15.0",
+    "ts-loader": "9.4.4",
+    "typescript": "5.1.6",
     "webpack": "5.88.2",
     "webpack-cli": "5.1.4"
   },

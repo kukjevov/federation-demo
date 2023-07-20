@@ -6,7 +6,7 @@ module.exports =
 {
     entry:
     {
-        'main': './src/app.js'
+        'main': './src/app'
     },
     mode: 'development',
     target: 'web',
@@ -19,6 +19,26 @@ module.exports =
         chunkFilename: `[name].chunk.js`,
         assetModuleFilename: 'assets/[hash][ext][query]'
     },
+    resolve: 
+    {
+        extensions: [".ts", ".js"],
+        extensionAlias: 
+        {
+            ".js": [".js", ".ts"],
+            ".cjs": [".cjs", ".cts"],
+            ".mjs": [".mjs", ".mts"]
+        }
+    },
+    module: 
+    {
+        rules: 
+        [
+            {
+                test: /\.([cm]?ts|tsx)$/,
+                loader: "ts-loader"
+            }
+        ]
+    },
     plugins:
     [
         new ModuleFederationPlugin(
@@ -26,10 +46,10 @@ module.exports =
             name: 'main',
             shared:
             {
-                testxxx:
+                "@angular/core":
                 {
                     eager: true,
-                    singleton: true,
+                    version: "16.1.4",
                 }
             },
         }),
