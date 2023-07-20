@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {BindThis} from '@jscrpt/common';
 
 console.log('toto je appka');
 
@@ -58,6 +59,8 @@ async function run()
     console.log('moduleeee', module);
     console.log(module.test);
     console.log(module.run());
+
+    console.log('ITS SAMEEE', module.bindThis == BindThis);
 }
 
 run();

@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {BindThis} from '@jscrpt/common';
 
 export const test = 20;
 export function run()
@@ -8,4 +9,6 @@ export function run()
     return true;
 }
 
-console.log('isBlank lib', Component);
+console.log('isBlank lib', Component, BindThis);
+
+export const bindThis = BindThis;

@@ -2,7 +2,7 @@
   "name": "module-fed",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
   "workspaces":[
     "app",
     "lib"
@@ -14,6 +14,7 @@
     "@anglr/common": "17.0.0-beta.20230711095959",
     "@jscrpt/common": "3.4.0",
     "rxjs": "7.8.1",
+    "extend": "3.0.2",
     "tslib": "2.6.0"
   },
   "devDependencies": {

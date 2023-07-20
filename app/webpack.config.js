@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ModuleFederationPlugin = require('webpack').container.ModuleFederationPlugin;
 const path = require('path');
+const sharedDependencies = require('../deps.cjs');
 
 module.exports =
 {
@@ -21,13 +22,9 @@ module.exports =
     },
     resolve: 
     {
-        extensions: [".ts", ".js"],
-        extensionAlias: 
-        {
-            ".js": [".js", ".ts"],
-            ".cjs": [".cjs", ".cts"],
-            ".mjs": [".mjs", ".mts"]
-        }
+        extensions: [".ts", ".mjs", ".js"],
+        mainFields: ['esm2022', 'es2022', 'esm2020', 'esm2015', 'es2015', 'jsnext:main', 'browser', 'module', 'main'],
+        conditionNames: ['esm2022', 'es2022', 'esm2020', 'es2015', 'import']
     },
     module: 
     {
@@ -36,7 +33,14 @@ module.exports =
             {
                 test: /\.([cm]?ts|tsx)$/,
                 loader: "ts-loader"
-            }
+            },
+            {
+                test: /\.m?js$/,
+                resolve: 
+                {
+                    fullySpecified: false, // disable the behaviour
+                },
+            },
         ]
     },
     plugins:
@@ -46,11 +50,7 @@ module.exports =
             name: 'main',
             shared:
             {
-                "@angular/core":
-                {
-                    eager: true,
-                    version: "16.1.4",
-                }
+                ...sharedDependencies,
             },
         }),
         new HtmlWebpackPlugin(),
