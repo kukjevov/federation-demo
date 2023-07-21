@@ -26,6 +26,11 @@
             "es2020",
             "dom"
         ],
+        "types":
+        [
+            "node",
+            "konami.js",
+        ],
         "plugins":
         [
             {
@@ -33,9 +38,14 @@
             }
         ]
     },
+    "files":
+    [
+        "config/global.d.ts"
+    ],
     "include":
     [
-        "src/**/*.ts",
+        "app/**/*.ts",
+        "packages/**/*.ts"
     ],
     "exclude":
     [

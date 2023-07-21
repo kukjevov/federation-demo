@@ -4,12 +4,15 @@
     "description": "",
     "type": "module",
     "scripts": {
-        "build": "webpack",
-        "build:min": "webpack --mode=production --node-env=production",
+        "build": "webpack --env css --env html",
+        "build:min": "webpack --env css --env html --mode=production --node-env=production",
         "clean": "rimraf wwwroot",
         "clean:deps": "rimraf package-lock.json node_modules || echo 'node_modules removed'",
         "clean:all": "npm run clean && npm run clean:deps",
-        "start": "node ./server.cjs"
+        "version:build": "ngv -e \"node write.version.cjs\"",
+        "ngc": "ngc",
+        "server": "node server.cjs",
+        "start": "npm run version:build && concurrently \"npm run server -- --webpack\" \"webpack serve --env css --env hmr\""
     },
     "engines": {
         "node": "^16.14.0 || >=18.10.0"
@@ -36,6 +39,7 @@
         "eslint-plugin-ressurectit": "0.1.0",
         "dotenv": "10.0.0",
         "sass": "1.63.6",
+        "cors": "2.8.5",
         "raw-loader": "4.0.2",
         "expose-loader": "3.1.0",
         "exports-loader": "3.1.0",

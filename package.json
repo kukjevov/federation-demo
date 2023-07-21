@@ -1,12 +1,9 @@
 {
     "name": "module-fed",
     "version": "1.0.0",
-    "description": "",
+    "private": true,
     "type": "module",
-    "workspaces":[
-        "app",
-        "lib"
-    ],
+    "description": "Root project for microfrontends",
     "scripts": {
         "build": "lerna run build --parallel",
         "build:min": "lerna run build:min --parallel",
@@ -14,22 +11,71 @@
         "clean:deps:local": "rimraf package-lock.json node_modules || echo 'node_modules removed'",
         "clean:deps": "lerna run clean:deps && npm run clean:deps:local",
         "clean:all": "lerna run clean:all && npm run clean:deps:local",
+        "server": "lerna run server --parallel",
         "start": "lerna run start --parallel"
     },
+    "engines": {
+        "node": "^16.14.0 || >=18.10.0"
+    },
+    "author": "Marek Bukovsky <marek.bukovsky@asseco-ce.com>",
+    "license": "MIT",
+    "workspaces":[
+        "app",
+        "lib"
+    ],
     "dependencies": {
-        "@angular/core": "16.1.4",
+        "@angular/animations": "16.1.4",
         "@angular/common": "16.1.4",
+        "@angular/compiler": "16.1.4",
+        "@angular/core": "16.1.4",
+        "@angular/forms": "16.1.4",
         "@angular/platform-browser": "16.1.4",
+        "@angular/platform-browser-dynamic": "16.1.4",
+        "@angular/router": "16.1.4",
+        "@angular/platform-server": "16.1.4",
+        "@angular/service-worker": "16.1.4",
+        "@angular/material": "16.1.4",
+        "@angular/cdk": "16.1.4",
+        "@anglr/animations": "9.1.0",
+        "@anglr/authentication": "11.0.0",
         "@anglr/common": "17.0.0-beta.20230711095959",
+        "@anglr/datetime": "6.1.0",
+        "@anglr/error-handling": "12.0.0",
+        "@anglr/grid": "9.0.4",
+        "@anglr/md-help": "9.0.0",
+        "@anglr/notifications": "9.0.0",
+        "@anglr/rest": "13.0.0",
+        "@anglr/select": "12.0.0",
+        "@anglr/server-stuff": "8.0.0",
+        "@anglr/translate-extensions": "9.0.0",
         "@jscrpt/common": "3.4.0",
-        "rxjs": "7.8.1",
+        "@ngx-translate/core": "15.0.0",
+        "angular2-hotkeys": "15.0.0",
         "zone.js": "0.13.1",
+        "rxjs": "7.8.1",
+        "xhr2": "0.2.1",
+        "form-data": "4.0.0",
+        "@fortawesome/fontawesome-free": "6.4.0",
+        "date-fns": "2.30.0",
+        "html2canvas": "1.4.1",
+        "numeral": "2.0.6",
         "extend": "3.0.2",
+        "crypto-js": "4.1.1",
+        "crypto-browserify": "3.12.0",
+        "buffer": "6.0.3",
+        "stream-browserify": "3.0.0",
+        "file-saver": "2.0.5",
+        "d3": "7.8.5",
+        "marked": "2.1.3",
+        "highlight.js": "10.6.0",
+        "sourcemapped-stacktrace": "1.1.11",
+        "@floating-ui/dom": "1.4.4",
+        "store": "2.0.12",
+        "konami": "1.6.3",
+        "structured-log": "0.2.0",
         "tslib": "2.6.0"
     },
     "devDependencies": {
         "lerna": "7.1.4"
-    },
-    "author": "Marek Bukovsky <marek.bukovsky@asseco-ce.com>",
-    "license": "ISC"
+    }
 }

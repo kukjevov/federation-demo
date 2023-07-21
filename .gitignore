@@ -3,7 +3,9 @@ wwwroot/
 build/
 packages/
 package/
+**/mockLogger/mocks
 package-lock.json
+**/config/version.json
 .env
 *.tsbuildinfo
 *.log
