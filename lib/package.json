@@ -6,6 +6,9 @@
     "scripts": {
         "build": "webpack",
         "build:min": "webpack --mode=production --node-env=production",
+        "clean": "rimraf wwwroot",
+        "clean:deps": "rimraf package-lock.json node_modules || echo 'node_modules removed'",
+        "clean:all": "npm run clean && npm run clean:deps",
         "start": "node ./server.cjs"
     },
     "engines": {

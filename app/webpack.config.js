@@ -10,9 +10,32 @@ import asyncToGenerator from '@babel/plugin-transform-async-to-generator';
 import {dirName} from './webpack.commonjs.cjs';
 import {sharedDependenciesLazy} from '../deps.cjs';
 
+const distPath = 'wwwroot/dist';
+const angularEntryFile = 'main.browser.bootstrap.ts';
+
 export default [function(options, args)
 {
     var prod = args && args.mode == 'production' || false;
+    var hmr = !!options && !!options.hmr;
+    var ssr = !!options && !!options.ssr;
+    var debug = !!options && !!options.debug;
+    var css = !!options && !!options.css;
+    var html = !!options && !!options.html;
+    var nomangle = !!options && !!options.nomangle;
+    var noCache = !!options && !!options.noCache;
+    var esbuild = !!options && !!options.esbuild;
+    var ngsw = process.env.NGSW == 'true';
+
+    if(!!options && options.ngsw != undefined)
+    {
+        ngsw = !!options.ngsw;
+    }
+    
+    console.log(`Angular service worker enabled: ${ngsw}.`);
+
+    options = options || {};
+
+    console.log(`Running build with following configuration Production: ${prod} HMR: ${hmr} SSR: ${ssr} Debug: ${debug} CSS: ${css} HTML: ${html} NoMangle: ${nomangle} NoCache: ${noCache} EsBuild: ${esbuild}`);
 
     const config =
     {
@@ -20,27 +43,28 @@ export default [function(options, args)
         {
             'main': './src/bootstrap'
         },
+        output:
+        {
+            globalObject: 'self',
+            path: path.join(dirName, distPath),
+            filename: `[name].js`,
+            publicPath: 'auto',
+            chunkFilename: `[name].${ssr ? 'server' : 'client'}.chunk.js`,
+            assetModuleFilename: 'assets/[hash][ext][query]'
+        },
         mode: 'development',
-        target: 'web',
+        target: ssr ? 'node' : 'web',
+        //TODO remove this when https://github.com/webpack/webpack-dev-server/issues/2792 is fixed
         optimization:
         {
             runtimeChunk: 'single',
-            ...prod ? 
+            ...prod ?
                 {
-                    splitChunks: 
+                    splitChunks:
                     {
                         chunks: 'all',
                     }
                 } : {},
-        },
-        output:
-        {
-            globalObject: 'self',
-            path: path.join(dirName, 'wwwroot'),
-            filename: `[name].js`,
-            publicPath: 'auto',
-            chunkFilename: `[name].chunk.js`,
-            assetModuleFilename: 'assets/[hash][ext][query]'
         },
         resolve:
         {
@@ -91,7 +115,7 @@ export default [function(options, args)
                     },
                     resolve:
                     {
-                        fullySpecified: false, // disable the behaviour
+                        fullySpecified: false
                     },
                 },
                 {
@@ -114,7 +138,7 @@ export default [function(options, args)
                     ...sharedDependenciesLazy,
                 },
             }),
-            new WebpackNotifierPlugin({title: `Webpack - BUILD`, excludeWarnings: true, alwaysNotify: true, sound: false}),
+            new WebpackNotifierPlugin({title: `Webpack - ${hmr ? 'HMR' : (ssr ? 'SSR' : 'BUILD')}`, excludeWarnings: true, alwaysNotify: true, sound: false}),
             //copy external dependencies
             // new CopyWebpackPlugin(
             // {
@@ -129,7 +153,7 @@ export default [function(options, args)
             }),
             new HtmlWebpackPlugin(
             {
-                filename: 'index.html',
+                filename: '../index.html',
                 template: path.join(dirName, 'index.html'),
                 inject: 'head'
             }),
