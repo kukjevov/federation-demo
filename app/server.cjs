@@ -69,7 +69,7 @@ if(!!argv.webpack)
 }
 
 //mock rest api
-require('./server.mock.cjs')(app);
+// require('./server.mock.cjs')(app);
 
 const onError = function(err, req, res)
 {
