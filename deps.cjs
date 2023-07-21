@@ -1,6 +1,7 @@
 const dependencies = require('./package.json');
 
 const sharedDependencies = {};
+const sharedDependenciesLazy = {};
 
 for(const dep in dependencies.dependencies)
 {
@@ -13,6 +14,14 @@ for(const dep in dependencies.dependencies)
         requiredVersion: version,
         version: version,
     };
+
+    sharedDependenciesLazy[dep] =
+    {
+        singleton: true,
+        requiredVersion: version,
+        version: version,
+    };
 }
 
-module.exports = sharedDependencies;
+exports.sharedDependencies = sharedDependencies;
+exports.sharedDependenciesLazy = sharedDependenciesLazy;
