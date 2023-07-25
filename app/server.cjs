@@ -17,8 +17,10 @@ const app = connect();
 connectExtensions.extendConnectUse(app);
 
 const wwwroot = path.join(__dirname, 'wwwroot');
+const serverPath = path.join(wwwroot, 'dist/server.es2015.js');
 const proxyUrlFile = path.join(__dirname, 'proxyUrl.cjs');
-var proxyUrl = "http://127.0.0.1:8080";
+let serverRenderFunc;
+let proxyUrl = "http://127.0.0.1:8080";
 
 const key = fs.readFileSync('server.key');
 const cert = fs.readFileSync('server.crt');
@@ -28,6 +30,19 @@ const options =
     key: key,
     cert: cert
 };
+
+/**
+ * Gets function used for server side rendering
+ */
+function getServerRenderFunc()
+{
+    if(!serverRenderFunc || !!argv.webpack)
+    {
+        serverRenderFunc = require(serverPath).serverRender;
+    }
+
+    return serverRenderFunc;
+}
 
 function isRequireAvailable(path)
 {
@@ -69,9 +84,9 @@ if(!!argv.webpack)
 }
 
 //mock rest api
-// require('./server.mock.cjs')(app);
+require('./server.mock.cjs')(app);
 
-const onError = function(err, req, res)
+function error(err, req, res)
 {
     if(err.code == "ECONNREFUSED" || err.code == "ECONNRESET")
     {
@@ -100,7 +115,10 @@ app.use(createProxyMiddleware(['/api', '/swagger'],
                                   ws: true,
                                   secure: false,
                                   changeOrigin: true,
-                                  onError
+                                  on: 
+                                  {
+                                      error,
+                                  },
                               }));
 
 //custom rest api
@@ -109,6 +127,37 @@ require('./server.rest.cjs')(app);
 //enable html5 routing
 app.use(history());
 
+//angular server side rendering
+app.use(function (req, res, next)
+{
+    if(req.url == '/index.html')
+    {
+        if(!isRequireAvailable(serverPath))
+        {
+            next();
+
+            return;
+        }
+
+        res.setHeader('Content-Type', 'text/html');
+
+        getServerRenderFunc()(path.join(wwwroot, 'index.html'), req.originalUrl, {baseUrl: "http://localhost:8888/", requestCookies: req.headers['cookie']}, function(err, succ)
+        {
+            if(succ && succ.statusCode)
+            {
+                res.statusCode = succ.statusCode;
+            }
+
+            res.end((err && err.toString()) || succ.html);
+        });
+
+        return;
+    }
+
+    next();
+});
+
+//maybe move to https://www.npmjs.com/package/express-static-gzip
 //return static files
 app.use(gzipStatic(wwwroot, 
                    {

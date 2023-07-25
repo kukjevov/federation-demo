@@ -69,7 +69,7 @@ function getSassLoaders()
 }
 
 const distPath = 'wwwroot/dist';
-const angularEntryFile = 'app.ts';
+const angularEntryFile = 'main.browser.ts';
 
 export default [function(options, args)
 {
@@ -182,7 +182,7 @@ export default [function(options, args)
             alias:
             {
                 "modernizr": path.join(dirName, "content/external/scripts/modernizr-custom.js"),
-                "numeral-languages": path.join(dirName, "../node_modules/numeral/locales.js")
+                "numeral-languages": path.join(dirName, "../node_modules/numeral/locales.js"),
             },
             mainFields: ssr ? ['esm2022', 'esm2015', 'es2015', 'jsnext:main', 'module', 'main'] : ['esm2022', 'es2022', 'esm2020', 'esm2015', 'es2015', 'jsnext:main', 'browser', 'module', 'main'],
             conditionNames: ['esm2022', 'es2022', 'esm2020', 'es2015', 'import']

@@ -1,7 +1,7 @@
 {
     "name": "module-fed-app",
     "version": "1.0.0",
-    "description": "",
+    "description": "Angular sample application shell",
     "type": "module",
     "scripts": {
         "build": "webpack --env css --env html",
@@ -41,7 +41,6 @@
         "@types/highlight.js": "10.1.0",
         "@types/konami.js": "1.4.29",
         "@types/mousetrap": "1.6.11",
-        "@angular/compiler": "16.1.4",
         "@angular/compiler-cli": "16.1.4",
         "@angular/language-service": "16.1.4",
         "@ngtools/webpack": "16.1.4",
