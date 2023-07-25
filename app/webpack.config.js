@@ -1,18 +1,75 @@
-import HtmlWebpackPlugin from 'html-webpack-plugin';
 import webpack from 'webpack';
 import path from 'path';
+// import {ScriptTarget} from 'typescript';
+import {createHash} from 'crypto';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
+// import HtmlWebpackTagsPlugin from 'html-webpack-tags-plugin';
+// import CopyWebpackPlugin from 'copy-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import WebpackNotifierPlugin from 'webpack-notifier';
+import CompressionPlugin from 'compression-webpack-plugin';
+import SpeedMeasurePlugin from 'speed-measure-webpack-plugin';
 import BitBarWebpackProgressPlugin from 'bitbar-webpack-progress-plugin';
+import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
+import TerserPlugin from 'terser-webpack-plugin';
 import {AngularWebpackPlugin} from '@ngtools/webpack';
 import linkerPlugin from '@angular/compiler-cli/linker/babel';
 import asyncGeneratorFunctions from '@babel/plugin-proposal-async-generator-functions';
 import asyncToGenerator from '@babel/plugin-transform-async-to-generator';
 import {HmrLoader} from '@angular-devkit/build-angular/src/tools/webpack/plugins/hmr/hmr-loader.js';
-import {dirName} from './webpack.commonjs.cjs';
+import {JavaScriptOptimizerPlugin} from '@angular-devkit/build-angular/src/tools/webpack/plugins/javascript-optimizer-plugin.js';
+import {dirName, konamiResolve, numeralResolve, cryptoBrowserifyResolve, bufferResolve, streamBrowserifyResolve, formDataResolve, ngVersion, tsConfig, webpackConfig} from './webpack.commonjs.cjs';
 import {sharedDependenciesLazy} from '../deps.cjs';
 
+/**
+ * Gets entries for webpack
+ * @param {boolean} ssr Indication that it should be entries for server side rendering
+ * @param {boolean} css Indication that it should be css added to entries
+ */
+function getEntries(ssr, css)
+{
+    if(ssr)
+    {
+        return {
+            server: path.join(dirName, 'app/main.server.ts')
+        };
+    }
+    else
+    {
+        var entries =
+        {
+            ...css ? 
+            {
+                style: ['./content/site.scss',
+                        './content/dark.scss',
+                        './content/light.scss']
+            } : {},
+            client: ['./app/bootstrap']
+        };
+
+        return entries;
+    }
+}
+
+/**
+ * Gets array of webpack loaders for external style files
+ */
+function getCssLoaders()
+{
+    return [{loader: MiniCssExtractPlugin.loader, options: {publicPath: ''}}, 'css-loader'];
+}
+
+/**
+ * Gets array of webpack loaders for style files
+ */
+function getSassLoaders()
+{
+    return [{loader: MiniCssExtractPlugin.loader, options: {publicPath: ''}}, 'css-loader', 'sass-loader'];
+}
+
 const distPath = 'wwwroot/dist';
-const angularEntryFile = 'main.browser.bootstrap.ts';
+const angularEntryFile = 'app.ts';
 
 export default [function(options, args)
 {
@@ -40,10 +97,7 @@ export default [function(options, args)
 
     const config =
     {
-        entry:
-        {
-            'main': './app/bootstrap'
-        },
+        entry: getEntries(ssr, css),
         output:
         {
             globalObject: 'self',
@@ -100,11 +154,37 @@ export default [function(options, args)
                     }
                 } : {},
         },
+        ...noCache ? {} :
+        {
+            cache:
+            {
+                type: 'filesystem',
+                cacheDirectory: path.join(dirName, "node_modules", ".cache", 'angular-webpack'),
+                maxMemoryGenerations: 1,
+                name: createHash('sha1')
+                    .update(ngVersion)
+                    .update(dirName)
+                    .update(tsConfig)
+                    .update(webpackConfig)
+                    .digest('hex'),
+            }
+        },
         resolve:
         {
             symlinks: false,
+            fallback:
+            {
+                "crypto": cryptoBrowserifyResolve,
+                "buffer": bufferResolve,
+                "stream": streamBrowserifyResolve
+            },
             extensions: ['.ts', '.mjs', '.js'],
-            mainFields: ['esm2022', 'es2022', 'esm2020', 'esm2015', 'es2015', 'jsnext:main', 'browser', 'module', 'main'],
+            alias:
+            {
+                "modernizr": path.join(dirName, "content/external/scripts/modernizr-custom.js"),
+                "numeral-languages": path.join(dirName, "../node_modules/numeral/locales.js")
+            },
+            mainFields: ssr ? ['esm2022', 'esm2015', 'es2015', 'jsnext:main', 'module', 'main'] : ['esm2022', 'es2022', 'esm2020', 'esm2015', 'es2015', 'jsnext:main', 'browser', 'module', 'main'],
             conditionNames: ['esm2022', 'es2022', 'esm2020', 'es2015', 'import']
         },
         module:
@@ -118,6 +198,47 @@ export default [function(options, args)
                         include: path.join(dirName, 'app', angularEntryFile),
                     }
                 ] : [],
+{
+                    test: numeralResolve,
+                    use:
+                    [
+                        {
+                            loader: 'expose-loader',
+                            options:
+                            {
+                                exposes: 'numeral'
+                            }
+                        }
+                    ]
+                },
+                {
+                    test: konamiResolve,
+                    use:
+                    [
+                        {
+                            loader: 'expose-loader',
+                            options:
+                            {
+                                exposes: 'Konami'
+                            }
+                        }
+                    ]
+                },
+                //server globals
+                {
+                    test: formDataResolve,
+                    use:
+                    [
+                        {
+                            loader: 'expose-loader',
+                            options:
+                            {
+                                exposes: 'FormData'
+                            }
+                        }
+                    ]
+                },
+                //file processing
                 {
                     test: /\.ts$/,
                     use:
@@ -164,6 +285,39 @@ export default [function(options, args)
                     test: /\.html$/,
                     use: ['raw-loader']
                 },
+{
+                    test: /\.component\.scss$/,
+                    use: ['raw-loader', 'sass-loader'],
+                    include:
+                    [
+                        path.join(dirName, 'app')
+                    ]
+                },
+                {
+                    test: /\.component\.css$/,
+                    use: ['raw-loader'],
+                    include:
+                    [
+                        path.join(dirName, 'packages')
+                    ]
+                },
+                {
+                    test: /\.css$/,
+                    use: getCssLoaders(),
+                    exclude:
+                    [
+                        path.join(dirName, 'app'),
+                        path.join(dirName, 'packages')
+                    ]
+                },
+                {
+                    test: /\.scss$/,
+                    use: getSassLoaders(),
+                    exclude:
+                    [
+                        path.join(dirName, 'app')
+                    ]
+                },
                 {
                     test: /\.(ttf|woff|woff2|eot|svg|png|jpeg|jpg|bmp|gif|icon|ico)$/,
                     type: 'asset/resource'
@@ -174,7 +328,7 @@ export default [function(options, args)
         [
             new webpack.container.ModuleFederationPlugin(
             {
-                name: 'main',
+                name: 'client',
                 shared:
                 {
                     ...sharedDependenciesLazy,
@@ -194,11 +348,10 @@ export default [function(options, args)
                 ...prod ? {ngDevMode: false} : {},
                 ngI18nClosureMode: false
             }),
-            new HtmlWebpackPlugin(
+            new MiniCssExtractPlugin(
             {
-                filename: '../index.html',
-                template: path.join(dirName, 'index.html'),
-                inject: 'head'
+                filename: prod ? '[name].[hash].css' : '[name].css',
+                chunkFilename: prod ? '[id].[hash].css' : '[id].css'
             }),
             new AngularWebpackPlugin(
             {
@@ -207,6 +360,89 @@ export default [function(options, args)
             }),
         ],
     };
+
+    if(prod && esbuild)
+    {
+        config.optimization =
+        {
+            minimizer: 
+            [
+                new JavaScriptOptimizerPlugin(
+                {
+                    // define: buildOptions.aot ? GLOBAL_DEFS_FOR_TERSER_WITH_AOT : GLOBAL_DEFS_FOR_TERSER,
+                    sourcemap: true,
+                    // target: ScriptTarget.ES2020,
+                    target: 7,
+                    keepNames: nomangle,
+                    removeLicenses: false,
+                    // advanced: buildOptions.buildOptimizer,
+                })
+            ]
+        };
+    }
+
+    if(prod && nomangle && !esbuild)
+    {
+        config.optimization =
+        {
+            minimize: true,
+            minimizer:
+            [
+                new TerserPlugin(
+                {
+                    terserOptions:
+                    {
+                        mangle: false
+                    }
+                })
+            ]
+        };
+    }
+
+    //server specific settings
+    if(ssr)
+    {
+    }
+    //client specific settings
+    else
+    {
+        if(html)
+        {
+            config.plugins.push(new HtmlWebpackPlugin(
+            {
+                filename: '../index.html',
+                template: path.join(dirName, 'index.html'),
+                inject: 'head'
+            }));
+
+            if(!debug)
+            {
+                config.plugins.push(new ScriptExtHtmlWebpackPlugin(
+                {
+                    defaultAttribute: 'defer'
+                }));
+            }
+        }
+    }
+
+    //production specific settings - prod is used only for client part
+    if(prod)
+    {
+        config.output.filename = `[name].[hash].js`;
+        config.output.chunkFilename = `[name].${ssr ? 'server' : 'client'}.chunk.[chunkhash].js`;
+
+        config.plugins.push(new CompressionPlugin({test: /\.js$|\.css$/}));
+    }
+
+    //this is used for debugging speed of compilation
+    if(debug)
+    {
+        config.plugins.push(new BundleAnalyzerPlugin());
+
+        let smp = new SpeedMeasurePlugin({outputFormat: 'humanVerbose'});
+
+        return smp.wrap(config);
+    }
 
     return config;
 }];

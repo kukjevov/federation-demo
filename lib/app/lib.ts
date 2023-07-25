@@ -21,7 +21,7 @@ export const bindThis = BindThis;
 {
     selector: 'selector',
     template: `
-    <div *ngIf="visible">test component pecka</div>
+    <div *ngIf="visible">test component</div>
     <button (click)="visible = !visible">click</button>
     `,
     standalone: true,
