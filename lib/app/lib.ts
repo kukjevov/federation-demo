@@ -1,9 +1,6 @@
 import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {BindThis} from '@jscrpt/common';
-import {config} from 'app-config';
-
-console.log('confiiiiiig', config);
 
 export const test = 20;
 export function run()
