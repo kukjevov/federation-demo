@@ -1,47 +1,14 @@
 {
+    "extends": "../tsconfig.json",
     "compilerOptions":
     {
-        "target": "es2020",
-        "module": "es2020",
-        "sourceMap": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "removeComments": true,
-        "noImplicitAny": true,
-        "noImplicitReturns": true,
-        "noImplicitOverride": true,
-        "noImplicitThis": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "strict": true,
-        "strictNullChecks": true,
-        "resolveJsonModule": true,
-        "esModuleInterop": true,
-        "importHelpers": true,
-        "newLine": "lf",
-        "moduleResolution": "node",
-        "outDir": "wwwroot/app",
-        "lib":
-        [
-            "es2020",
-            "dom"
-        ],
-        "types":
-        [
-            "node",
-            "konami.js",
-        ],
-        "plugins":
-        [
-            {
-                "name": "@angular/language-service"
-            }
-        ]
+        "baseUrl": ".",
+        "paths": 
+        {
+            "shared-stuff": ["../shared-stuff/index.ts"],
+            "app-config": ["../app-config/index.ts"],
+        },
     },
-    "files":
-    [
-        "config/global.d.ts"
-    ],
     "include":
     [
         "app/**/*.ts",
@@ -51,9 +18,4 @@
     [
         "node_modules"
     ],
-    "angularCompilerOptions":
-    {
-        "strictInjectionParameters": true,
-        "strictTemplates": true
-    }
 }

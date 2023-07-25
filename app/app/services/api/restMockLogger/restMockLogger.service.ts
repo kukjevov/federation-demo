@@ -6,8 +6,7 @@ import {AuthInterceptor, SuppressAuthInterceptor} from '@anglr/authentication';
 import {isBlank, isString} from '@jscrpt/common';
 import {lastValueFrom} from '@jscrpt/common/rxjs';
 import {NEVER, Observable} from 'rxjs';
-
-import {config} from '../../../config';
+import {config} from 'app-config';
 
 /**
  * Service for logging responses for mocks

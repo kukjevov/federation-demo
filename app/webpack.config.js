@@ -1,6 +1,5 @@
 import webpack from 'webpack';
 import path from 'path';
-// import {ScriptTarget} from 'typescript';
 import {createHash} from 'crypto';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
@@ -39,7 +38,7 @@ function getEntries(ssr, css)
     {
         var entries =
         {
-            ...css ? 
+            ...css ?
             {
                 style: ['./content/site.scss',
                         './content/dark.scss',
@@ -183,6 +182,8 @@ export default [function(options, args)
             {
                 "modernizr": path.join(dirName, "content/external/scripts/modernizr-custom.js"),
                 "numeral-languages": path.join(dirName, "../node_modules/numeral/locales.js"),
+                "shared-stuff": path.join(dirName, "../shared-stuff/index.ts"),
+                "app-config": path.join(dirName, "../app-config/index.ts"),
             },
             mainFields: ssr ? ['esm2022', 'esm2015', 'es2015', 'jsnext:main', 'module', 'main'] : ['esm2022', 'es2022', 'esm2020', 'esm2015', 'es2015', 'jsnext:main', 'browser', 'module', 'main'],
             conditionNames: ['esm2022', 'es2022', 'esm2020', 'es2015', 'import']
@@ -191,14 +192,14 @@ export default [function(options, args)
         {
             rules:
             [
-                ...hmr ? 
+                ...hmr ?
                 [
                     {
                         loader: HmrLoader,
                         include: path.join(dirName, 'app', angularEntryFile),
                     }
                 ] : [],
-{
+                {
                     test: numeralResolve,
                     use:
                     [
@@ -285,7 +286,7 @@ export default [function(options, args)
                     test: /\.html$/,
                     use: ['raw-loader']
                 },
-{
+                {
                     test: /\.component\.scss$/,
                     use: ['raw-loader', 'sass-loader'],
                     include:
@@ -365,7 +366,7 @@ export default [function(options, args)
     {
         config.optimization =
         {
-            minimizer: 
+            minimizer:
             [
                 new JavaScriptOptimizerPlugin(
                 {

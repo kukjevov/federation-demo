@@ -5,8 +5,8 @@ import {AuthInterceptor, SuppressAuthInterceptor} from '@anglr/authentication';
 import {ClientErrorHandlingMiddleware} from '@anglr/error-handling/rest';
 import {EMPTY, NEVER, Observable} from 'rxjs';
 import {catchError} from 'rxjs/operators';
+import {config} from 'app-config';
 
-import {config} from '../../../config';
 import version from '../../../../config/version.json';
 
 /**

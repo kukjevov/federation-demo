@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef, Inject} from '@angular/core';
+import {Component, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef, Inject, OnInit, AfterViewInit, OnDestroy} from '@angular/core';
 import {CommonModule, DOCUMENT} from '@angular/common';
 import {RouterModule, RouterOutlet} from '@angular/router';
 import {LOGGER, Logger, ProgressIndicatorModule} from '@anglr/common';
@@ -13,11 +13,11 @@ import {nameof} from '@jscrpt/common';
 import {TranslateService} from '@ngx-translate/core';
 import {Subscription} from 'rxjs';
 import {Hotkey, HotkeyModule} from 'angular2-hotkeys';
+import {SettingsDebug, SettingsGeneral} from 'app-config';
 
 import {MenuModule} from '../modules';
 import {loaderTrigger, routeAnimationTrigger} from './app.component.animations';
 import {ConfigReleaseService} from '../services/api/configRelease/configRelease.service';
-import {SettingsDebug, SettingsGeneral} from '../config';
 import version from '../../config/version.json';
 import {SettingsService} from '../services/settings';
 
@@ -45,7 +45,7 @@ import {SettingsService} from '../services/settings';
     providers: [AppHotkeysService, ConfigReleaseService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppSAComponent
+export class AppSAComponent implements OnInit, AfterViewInit, OnDestroy
 {
     //######################### private fields #########################
     

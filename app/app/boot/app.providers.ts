@@ -6,10 +6,10 @@ import {extractRoutes} from '@anglr/common/router';
 import {ConsoleLogModule} from '@anglr/common/structured-log';
 import {NotificationsGlobalModule} from '@anglr/notifications';
 import {MissingTranslationHandler, TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {config} from 'app-config';
 
 import {WebpackTranslateLoaderService} from '../services/webpackTranslateLoader';
 import {ReportMissingTranslationService} from '../services/missingTranslation';
-import {config} from '../config';
 import {accessDeniedRoute} from '../pages/accessDenied/accessDenied.route';
 import {notFoundRoute} from '../pages/notFound/notFound.route';
 import {components} from './app.component.routes';

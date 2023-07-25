@@ -10,7 +10,7 @@ import {RestTransferStateService} from '@anglr/rest';
 import {simpleNotification} from '@jscrpt/common';
 
 import {AppSAComponent} from './boot/app.component';
-import {config} from './config';
+import {config} from 'app-config';
 import {appProviders} from './boot/app.providers';
 import {browserAppProviders} from './boot/browser-app.providers';
 import {globalProviders} from './boot/app.config';

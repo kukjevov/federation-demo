@@ -6,8 +6,8 @@ import {ServiceUnavailableInterceptor, HttpGatewayTimeoutInterceptor, NoConnecti
 import {Dictionary} from '@jscrpt/common';
 import {NEVER, Observable, Observer, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
+import {config} from 'app-config';
 
-import {config} from '../../../config';
 import {UserInfo} from './account.interface';
 import permissions from '../../../../config/permissions.json';
 

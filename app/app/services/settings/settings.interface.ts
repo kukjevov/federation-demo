@@ -1,4 +1,4 @@
-import {SettingsGeneral, SettingsDebug, SettingsLogging} from '../../config';
+import {SettingsGeneral, SettingsDebug, SettingsLogging} from 'app-config';
 
 /**
  * Definition of settings storage

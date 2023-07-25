@@ -1,6 +1,6 @@
 import {Dictionary} from '@jscrpt/common';
+import {Configuration, config as cfg} from 'app-config';
 
-import {Configuration, config as cfg} from './config';
 import defaultConfig from '../config/config.json';
 
 /**

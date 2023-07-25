@@ -1,7 +1,6 @@
 import {isFunction, isBlank, globalDefine} from '@jscrpt/common';
 import {Observable, Subscription} from 'rxjs';
-
-import {config} from './config';
+import {config} from 'app-config';
 
 globalDefine(global =>
 {

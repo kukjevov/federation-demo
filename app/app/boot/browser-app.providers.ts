@@ -2,8 +2,7 @@ import {EnvironmentProviders, FactoryProvider, Provider, importProvidersFrom} fr
 import {provideAnimations} from '@angular/platform-browser/animations';
 import {AnglrExceptionHandlerOptions} from '@anglr/error-handling';
 import {HotkeyModule} from 'angular2-hotkeys';
-
-import {config} from '../config';
+import {config} from 'app-config';
 
 /**
  * Browser specific app providers

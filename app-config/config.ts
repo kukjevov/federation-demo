@@ -1,7 +1,7 @@
 import {StringDictionary} from '@jscrpt/common';
 import {LogEventLevel} from 'structured-log';
 
-import defaultConfig from '../config/config.json';
+import defaultConfig from './defaultConfig.json';
 
 /**
  * Language definition

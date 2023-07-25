@@ -1,6 +1,3 @@
-declare const __webpack_init_sharing__: any;
-declare const __webpack_share_scopes__: any;
-
 export function loadScript()
 {
     const element = document.createElement('script');
@@ -30,7 +27,7 @@ export function loadComponent(scope: any, module: any)
         await __webpack_init_sharing__('default');
         const container = window[scope] as any; // or get the container somewhere else
         // Initialize the container, it may provide shared modules
-        await container.init(__webpack_share_scopes__.default);
+        await container.init(__webpack_share_scopes__['default']);
         const factory = await container.get(module);
         const Module = factory();
         

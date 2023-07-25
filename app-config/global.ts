@@ -1,12 +1,12 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
-/// <reference path="../../node_modules/@anglr/common/typings/structured-log/index.d.ts" />
+/// <reference path="../node_modules/@anglr/common/typings/structured-log/index.d.ts" />
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
-/// <reference path="../../node_modules/@anglr/common/typings/positions/index.d.ts" />
+/// <reference path="../node_modules/@anglr/common/typings/positions/index.d.ts" />
 
 declare const isProduction: boolean;
 declare const isNgsw: boolean;
-declare const __webpack_init_sharing__: any;
-declare const __webpack_share_scopes__: any;
+declare const __webpack_init_sharing__: (scope: string) => Promise<void>;
+declare const __webpack_share_scopes__: Record<string, Record<string, unknown>>;
 
 interface ImportMeta
 {

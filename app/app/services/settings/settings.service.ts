@@ -1,10 +1,10 @@
 import {Injectable, KeyValueDiffers, Inject, KeyValueDiffer} from '@angular/core';
 import {extend} from '@jscrpt/common';
 import {Subject, Observable} from 'rxjs';
+import {SettingsGeneral, SettingsDebug, SettingsLogging} from 'app-config';
 
 import {SettingsStorage} from './settings.interface';
 import {SETTINGS_STORAGE} from '../../misc/tokens';
-import {SettingsGeneral, SettingsDebug, SettingsLogging} from '../../config';
 
 /**
  * Class used as settings service
