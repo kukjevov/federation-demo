@@ -21,7 +21,8 @@
     "license": "MIT",
     "workspaces":[
         "app",
-        "lib"
+        "lib",
+        "cmp"
     ],
     "dependencies": {
         "@angular/animations": "16.1.4",

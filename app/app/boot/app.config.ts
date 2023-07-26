@@ -1,4 +1,5 @@
 import {FactoryProvider, APP_INITIALIZER, ClassProvider, ValueProvider, Provider, ExistingProvider} from '@angular/core';
+import {Router} from '@angular/router';
 import {AuthenticationService, AUTH_INTERCEPTOR_PROVIDER, SUPPRESS_AUTH_INTERCEPTOR_PROVIDER, AuthenticationServiceOptions} from '@anglr/authentication';
 import {LocalPermanentStorageService} from '@anglr/common/store';
 import {PROGRESS_INTERCEPTOR_PROVIDER, GlobalizationService, STRING_LOCALIZATION, PERMANENT_STORAGE, DebugDataEnabledService, DEFAULT_NOTIFICATIONS, NOTIFICATIONS} from '@anglr/common';
@@ -30,6 +31,32 @@ import {SETTINGS_STORAGE} from '../misc/tokens';
 import {RestLoggerService} from '../services/api/restLogger';
 import {AccountAuthOptions} from '../services/api/account/accountAuth.options';
 import {RestMockLoggerService} from '../services/api/restMockLogger';
+import {PluginLoader} from '../services/pluginLoader';
+
+/**
+ * Creates APP initialization factory, that initialize plugins routes
+ */
+export function appInitializerPluginsRoutesFactory(pluginLoader: PluginLoader, router: Router): () => Promise<void>
+{
+    return async () =>
+    {
+        const currentConfig = router.config;
+
+        for(const pluginConfig of config.plugins)
+        {
+            const pluginDef = await pluginLoader.getPlugin(pluginConfig);
+
+            if(!pluginDef)
+            {
+                continue;
+            }
+
+            currentConfig.unshift(...pluginDef.routes);
+        }
+
+        router.resetConfig(currentConfig);
+    };
+}
 
 /**
  * Creates APP initialization factory, that first try to authorize user before doing anything else
@@ -117,6 +144,13 @@ export const globalProviders: Provider[] =
     DIALOG_INTERNAL_SERVER_ERROR_RENDERER_PROVIDER,
 
     //######################### APP INITIALIZER #########################
+    <FactoryProvider>
+    {
+        useFactory: appInitializerPluginsRoutesFactory,
+        provide: APP_INITIALIZER,
+        deps: [PluginLoader, Router],
+        multi: true
+    },
     <FactoryProvider>
     {
         useFactory: appInitializerFactory,

@@ -34,7 +34,7 @@ if(!!argv.webpack)
     //WEBPACK 5 DEV SERVER
     app.use(createProxyMiddleware(['/dist'],
     {
-        target: 'http://localhost:9001',
+        target: 'http://localhost:9002',
         ws: true,
     }));
 }
@@ -56,9 +56,9 @@ app.use(gzipStatic(wwwroot,
                        }
                    }));
 
-console.log("Listening on port 8080 => http://localhost:8080");
+console.log("Listening on port 8081 => http://localhost:8081");
 //create node.js http server and listen on port
-app.listen(8080);
-console.log("Listening on port 4443 => https://localhost:4443");
+app.listen(8081);
+console.log("Listening on port 4444 => https://localhost:4444");
 //create node.js https server and listen on port
-https.createServer(options, app).listen(4443);
+https.createServer(options, app).listen(4444);

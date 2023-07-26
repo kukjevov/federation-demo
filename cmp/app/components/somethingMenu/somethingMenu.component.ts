@@ -2,13 +2,13 @@ import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {RouterModule} from '@angular/router';
 
 /**
- * Component that servers as menu sample component
+ * Component that servers as menu something component
  */
 @Component(
 {
-    selector: 'menu-sample',
-    templateUrl: 'sample.component.html',
-    styleUrls: ['sample.component.scss'],
+    selector: 'something-menu',
+    templateUrl: 'somethingMenu.component.html',
+    styleUrls: ['somethingMenu.component.scss'],
     standalone: true,
     imports:
     [
@@ -16,6 +16,6 @@ import {RouterModule} from '@angular/router';
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SampleSAComponent
+export class SomethingMenuSAComponent
 {
 }

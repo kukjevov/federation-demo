@@ -1,13 +1,17 @@
 import {Route} from '@angular/router';
 
-import {SampleSAComponent} from './components';
+import {SampleMenuSAComponent} from './components';
+import {samplePageRoute} from './pages';
 
 /**
  * Component that is displayed in menu
  */
-export const menu = SampleSAComponent;
+export const menu = SampleMenuSAComponent;
 
 /**
  * Array of routes added to app
  */
-export const routes: Route[] = [];
+export const routes: Route[] = 
+[
+    samplePageRoute,
+];

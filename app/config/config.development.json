@@ -31,6 +31,17 @@
         "theme": "light",
         "language": "en"
     },
+    "plugins":
+    [
+        {
+            "url": "http://localhost:8080/remoteEntry.js",
+            "scope": "lib"
+        },
+        {
+            "url": "http://localhost:8081/remoteEntry.js",
+            "scope": "cmp"
+        }
+    ],
     "debug":
     {
         "consoleEnabled": true,

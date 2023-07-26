@@ -48,7 +48,7 @@ import {SettingsService} from '../services/settings';
 export class AppSAComponent implements OnInit, AfterViewInit, OnDestroy
 {
     //######################### private fields #########################
-    
+
     /**
      * Subscription for router outlet activation changes
      */
@@ -140,7 +140,7 @@ export class AppSAComponent implements OnInit, AfterViewInit, OnDestroy
         });
 
         this._settingsChangeSubscription = settings.settingsChange
-            .subscribe(itm => 
+            .subscribe(itm =>
             {
                 if(itm == nameof<SettingsGeneral>('theme'))
                 {
@@ -157,7 +157,7 @@ export class AppSAComponent implements OnInit, AfterViewInit, OnDestroy
             });
 
         this._settingsDebuggingChangeSubscription = settings.settingsDebuggingChange
-            .subscribe(itm => 
+            .subscribe(itm =>
             {
                 if(itm == nameof<SettingsDebug>('consoleEnabled'))
                 {
@@ -191,7 +191,7 @@ export class AppSAComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     //######################### public methods - implementation of OnInit #########################
-    
+
     /**
      * Initialize component
      */
@@ -201,12 +201,12 @@ export class AppSAComponent implements OnInit, AfterViewInit, OnDestroy
 
         this.serverVersion = srvCfg?.release ?? '';
         this.serverName = srvCfg?.name ?? '';
-        
+
         this._changeDetector.detectChanges();
     }
 
     //######################### public methods - implementation of AfterViewInit #########################
-    
+
     /**
      * Called when view was initialized
      */
@@ -221,7 +221,7 @@ export class AppSAComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     //######################### public methods - implementation of OnDestroy #########################
-    
+
     /**
      * Called when component is destroyed
      */
