@@ -4,6 +4,27 @@ import {LogEventLevel} from 'structured-log';
 import defaultConfig from './defaultConfig.json';
 
 /**
+ * Configuration for obtaining plugin
+ */
+export interface PluginConfig
+{
+    /**
+     * Url to remote entry point containing plugin
+     */
+    url: string;
+
+    /**
+     * Name of scope that should be loaded
+     */
+    scope: string;
+
+    /**
+     * Name of module that should be loaded from scope
+     */
+    module?: string;
+}
+
+/**
  * Language definition
  */
 export interface LanguageDef
@@ -105,6 +126,11 @@ export interface Configuration
      * General settings
      */
     general: SettingsGeneral;
+
+    /**
+     * Definition of plugins
+     */
+    plugins: PluginConfig[];
 
     /**
      * Debug settings, used for debugging purposes
