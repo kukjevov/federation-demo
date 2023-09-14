@@ -3,8 +3,9 @@ import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {MatDialogModule} from '@angular/material/dialog';
 import {provideRouter, withComponentInputBinding} from '@angular/router';
 import {extractRoutes} from '@anglr/common/router';
-import {ConsoleLogModule} from '@anglr/common/structured-log';
-import {NotificationsGlobalModule} from '@anglr/notifications';
+import {StructuredLogLogger, provideConsoleComponentSink} from '@anglr/common/structured-log';
+import {provideLogger} from '@anglr/common';
+import {provideGlobalNotifications} from '@anglr/notifications';
 import {MissingTranslationHandler, TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {config} from 'app-config';
 
@@ -22,8 +23,9 @@ export const appProviders: (Provider|EnvironmentProviders)[] =
     provideZoneChangeDetection({eventCoalescing: true, runCoalescing: true}),
     provideHttpClient(withInterceptorsFromDi(),),
     importProvidersFrom(MatDialogModule),
-    importProvidersFrom(NotificationsGlobalModule.forRoot()),
-    importProvidersFrom(ConsoleLogModule.forRoot()),
+    provideGlobalNotifications(),
+    provideConsoleComponentSink(),
+    provideLogger(StructuredLogLogger),
     importProvidersFrom(TranslateModule.forRoot(
     {
         loader: <ClassProvider>
