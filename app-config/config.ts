@@ -1,5 +1,5 @@
+import {LogLevel} from '@anglr/common';
 import {StringDictionary} from '@jscrpt/common';
-import {LogEventLevel} from 'structured-log';
 
 import defaultConfig from './defaultConfig.json';
 
@@ -109,7 +109,7 @@ export interface SettingsLogging
     /**
      * Minimal log level for console sink
      */
-    consoleLogLevel: keyof typeof LogEventLevel|string;
+    consoleLogLevel: keyof typeof LogLevel|string;
 }
 
 /**
